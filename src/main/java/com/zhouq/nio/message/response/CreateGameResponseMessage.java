@@ -1,6 +1,7 @@
 package com.zhouq.nio.message.response;
 
 import com.zhouq.nio.message.basic.Message;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateGameResponseMessage extends Message {
-    private Integer gameID;
+
     private boolean flag;
-    public CreateGameResponseMessage(int gameID){
-        this.gameID = gameID;
-    }
     @Override
     public int getMessageType() {
         return CREATE_GAME_RESPONSE;

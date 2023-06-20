@@ -1,7 +1,6 @@
 package com.zhouq.nio.message.response;
 
 import com.zhouq.nio.message.basic.Message;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,16 +10,16 @@ import lombok.Setter;
  * </p>
  *
  * @author 计算机系 周启俊
- * @since 2023/6/19 13:02
+ * @since 2023/6/19 13:06
  */
-
 @Getter
 @Setter
-public class JoinGameResponseMessage extends Message {
+public class SuePeaceResponseMessage extends Message {
     private boolean flag;
-    private Integer playerType;
+    private int from;
+    private int to;
     @Override
     public int getMessageType() {
-        return JOIN_GAME_RESPONSE;
+        return SUE_PEACE_RESPONSE;
     }
 }

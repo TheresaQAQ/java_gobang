@@ -14,8 +14,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SueSpaceRequestsMessage extends Message {
-
+public class SuePeaceRequestsMessage extends Message {
+    private boolean flag;
+    private int from;
+    private int to;
     @Override
     public int getMessageType() {
         return SUE_PEACE_REQUESTS;

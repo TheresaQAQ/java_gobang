@@ -18,7 +18,6 @@ public class PlayChessRequestsMessage extends Message {
     private int mapX;
     private int mapY;
     private int playerType;
-    private Integer gameId;
     @Override
     public int getMessageType() {
         return PLAY_CHESS_REQUESTS;

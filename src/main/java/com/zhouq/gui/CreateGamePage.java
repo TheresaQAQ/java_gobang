@@ -37,10 +37,12 @@ public class CreateGamePage extends BasicPage {
         button.addActionListener(button -> {
             new Thread(() -> SocketServer.runServer(Integer.parseInt(portTextField.getText()))).start();
             new Thread(() ->
-                    //new GamePage("五子棋", "localhost", Integer.parseInt(portTextField.getText()))
-                    SocketClient.runClient("localhost", Integer.parseInt(portTextField.getText()),null))
+                    SocketClient.runClient(
+                            "localhost",
+                            Integer.parseInt(portTextField.getText()),
+                            null,
+                            this))
                     .start();
-            this.setVisible(false);
         });
     }
 

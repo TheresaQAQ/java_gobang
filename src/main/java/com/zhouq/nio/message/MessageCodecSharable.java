@@ -2,23 +2,25 @@ package com.zhouq.nio.message;
 
 import com.alibaba.fastjson.JSON;
 import com.zhouq.nio.message.basic.Message;
+import com.zhouq.nio.message.requests.SuePeaceRequestsMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.MessageToMessageCodec;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 /**
  * <p>
- *
+ * 编解码器
  * </p>
  *
  * @author 计算机系 周启俊
  * @since 2023/6/19 13:10
  */
 @ChannelHandler.Sharable
+@Slf4j
 public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> outList) throws Exception {
@@ -37,6 +39,9 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         //内容
         out.writeBytes(bytes);
         outList.add(out);
+        if (message instanceof SuePeaceRequestsMessage suePeaceRequestsMessage) {
+            log.debug("编码求和请求");
+        }
     }
 
     @Override
@@ -48,14 +53,13 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         int length = in.readInt();
         byte[] bytes = new byte[length];
         in.readBytes(bytes,0,length);
-        System.out.println("解码...");
         if (Integer.parseInt(String.valueOf(serializerType))==0) {
             //json
             Message object = JSON.parseObject(bytes, Message.getMessageClass(messageType));
-//            if (object instanceof CreateGameRequestsMessage message) {
-//                list.add(message);
-//            }
             list.add(object);
+            if (object instanceof SuePeaceRequestsMessage suePeaceRequestsMessage) {
+                log.debug("解码求和请求");
+            }
         }
     }
 }

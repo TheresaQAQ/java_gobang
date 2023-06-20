@@ -15,7 +15,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RetractChessRequestsMessage extends Message {
-
+    private int from;
+    private int to;
     @Override
     public int getMessageType() {
         return RETRACT_CHESS_REQUESTS;

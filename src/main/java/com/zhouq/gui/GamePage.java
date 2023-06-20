@@ -3,11 +3,15 @@ package com.zhouq.gui;
 import com.zhouq.core.entity.Player;
 import com.zhouq.gui.basic.BasicPage;
 import com.zhouq.nio.message.requests.PlayChessRequestsMessage;
+import com.zhouq.nio.message.requests.RetractChessRequestsMessage;
+import com.zhouq.nio.message.requests.SuePeaceRequestsMessage;
 import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -26,6 +30,7 @@ import java.io.IOException;
 
 @Getter
 @Setter
+@Slf4j
 public class GamePage extends BasicPage {
     private Channel channel;
     private Integer gameId;
@@ -44,17 +49,60 @@ public class GamePage extends BasicPage {
 
     private int gameTime = 0;// 游戏时间限制（秒）
     private int blackTime = 0, whiteTime = 0;// 黑白方剩余时间
-    public GamePage(String title, Integer width, Integer height){
+
+    private JButton retractChess;
+    private JButton sueSpace;
+    private JTextArea msgArea;
+
+    public GamePage(String title, Integer width, Integer height) {
         super(title, width, height);
         addContent();
     }
-    public GamePage(String title){
-        this(title,600,600);
+
+    public GamePage(String title) {
+        this(title, 600, 600);
     }
 
     @Override
     public void initContent() {
         offsetImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+        retractChess = new JButton("悔棋");
+        sueSpace = new JButton("求和");
+
+        msgArea = new JTextArea();
+    }
+
+    @Override
+    public void addContent() {
+        // 获取屏幕宽高
+        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+        // 棋盘位置矩形
+        chessBoardRect = new Rectangle(50, 120, 370, 370);
+        this.setLocation((screenWidth - width) / 2, (screenHeight - height) / 2);
+
+        this.setLayout(null);
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(null);
+        jPanel.setSize(200, 100);
+        sueSpace.setLayout(null);
+        sueSpace.setBounds(430, 429, 60, 40);
+        retractChess.setLayout(null);
+        retractChess.setBounds(520, 429, 60, 40);
+        this.getContentPane().add(sueSpace);
+        this.getContentPane().add(retractChess);
+
+
+        repaint();
+        // 设置背景
+        try {
+            bgImage = ImageIO.read(new File("D:\\code\\java\\java_gobang\\src\\main\\java\\com\\others\\img\\background.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setVisible(true);
+
     }
 
     @Override
@@ -62,6 +110,7 @@ public class GamePage extends BasicPage {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                log.debug("棋盘被点击");
                 PlayChessRequestsMessage playChessMessage = new PlayChessRequestsMessage();
                 mouseX = e.getX();
                 mouseY = e.getY();
@@ -112,27 +161,32 @@ public class GamePage extends BasicPage {
 
             }
         });
+        //悔棋
+        retractChess.addActionListener(button -> {
+            RetractChessRequestsMessage requestsMessage = new RetractChessRequestsMessage();
+            requestsMessage.setFrom(this.playerType);
+            requestsMessage.setTo(this.playerType == Player.WHITE_CHESS ? Player.BLACK_CHESS : Player.WHITE_CHESS);
+            requestsMessage.setGameId(this.getGameId());
+
+            log.debug("to:"+Player.NAMES.get(requestsMessage.getTo()));
+            log.debug("from:"+Player.NAMES.get(requestsMessage.getFrom()));
+
+            channel.writeAndFlush(requestsMessage);
+        });
+
+        //求和
+        sueSpace.addActionListener(button -> {
+            SuePeaceRequestsMessage requestsMessage = new SuePeaceRequestsMessage();
+            requestsMessage.setFrom(this.playerType);
+            requestsMessage.setTo(this.playerType == Player.WHITE_CHESS ? Player.BLACK_CHESS : Player.WHITE_CHESS);
+            requestsMessage.setGameId(this.getGameId());
+
+            log.debug("to:"+Player.NAMES.get(requestsMessage.getTo()));
+            log.debug("from:"+Player.NAMES.get(requestsMessage.getFrom()));
+            channel.writeAndFlush(requestsMessage);
+        });
     }
 
-    @Override
-    public void addContent() {
-        // 获取屏幕宽高
-        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-
-        // 棋盘位置矩形
-        chessBoardRect = new Rectangle(50, 120, 370, 370);
-
-        setLocation((screenWidth - width) / 2, (screenHeight - height) / 2);
-        repaint();
-        // 设置背景
-        try {
-            bgImage = ImageIO.read(new File("D:\\code\\java\\java_gobang\\src\\main\\java\\com\\others\\img\\background.jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setVisible(true);
-    }
 
     @Override
     public void paint(Graphics g1) {

@@ -16,7 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JoinGameRequestsMessage extends Message {
-    private Integer gameID;
     private Integer playerType;
     @Override
     public int getMessageType() {

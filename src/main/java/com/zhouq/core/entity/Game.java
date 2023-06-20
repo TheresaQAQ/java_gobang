@@ -1,9 +1,10 @@
 package com.zhouq.core.entity;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -20,4 +21,10 @@ public class Game {
     private Player whitePlayer;
     private Player blackPlayer;
     private boolean isBlack;
+    private boolean hasWinner;
+    private List<PlayChessHistory> playChessHistory = new ArrayList<>();
+
+    public Player getPlay(int i) {
+        return i == Player.BLACK_CHESS ? this.blackPlayer : whitePlayer;
+    }
 }

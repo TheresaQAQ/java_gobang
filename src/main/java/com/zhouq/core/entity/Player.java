@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+
 /**
  * <p>
  *
@@ -22,4 +24,10 @@ public class Player {
 
     public static int BLACK_CHESS = 0;
     public static int WHITE_CHESS = 1;
+    public static HashMap<Integer, String> NAMES = new HashMap<>();
+
+    static {
+        NAMES.put(BLACK_CHESS, "黑方");
+        NAMES.put(WHITE_CHESS, "白方");
+    }
 }

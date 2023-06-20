@@ -25,6 +25,8 @@ public abstract class Message implements Serializable {
 
     private int sequenceId;
     private int messageType;
+    private int gameId;
+    private String msg;
 
     public abstract int getMessageType();
 
@@ -40,6 +42,8 @@ public abstract class Message implements Serializable {
     public static final int SUE_PEACE_RESPONSE = 9;
     public static final int END_GAME_REQUESTS = 10;
     public static final int END_GAME_RESPONSE = 11;
+    public static final int WIN_GAME_RESPONSE = 12;
+    public static final int LOSE_GAME_RESPONSE = 13;
     private static final Map<Integer, Class<?>> messageClasses = new HashMap<>();
 
     static {
@@ -51,10 +55,10 @@ public abstract class Message implements Serializable {
         messageClasses.put(5, PlayChessResponseMessage.class);
         messageClasses.put(6, RetractChessRequestsMessage.class);
         messageClasses.put(7, RetractChessResponseMessage.class);
-        messageClasses.put(8, SueSpaceResponseMessage.class);
-        messageClasses.put(9, SueSpaceRequestsMessage.class);
-        //messageClasses.put(10, CreateGameRequestsMessage.class);
-        //messageClasses.put(11, CreateGameResponseMessage.class);
+        messageClasses.put(8, SuePeaceRequestsMessage.class);
+        messageClasses.put(9, SuePeaceResponseMessage.class);
+        messageClasses.put(12, WinGameResponseMessage.class);
+        messageClasses.put(13, LoseGameResponseMessage.class);
     }
     //public int CREATE_GAME_REQUESTS = 12;
     //public int CREATE_GAME_RESPONSE = 13;
