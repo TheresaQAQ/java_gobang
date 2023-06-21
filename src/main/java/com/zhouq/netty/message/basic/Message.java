@@ -1,7 +1,7 @@
-package com.zhouq.nio.message.basic;
+package com.zhouq.netty.message.basic;
 
-import com.zhouq.nio.message.requests.*;
-import com.zhouq.nio.message.response.*;
+import com.zhouq.netty.message.requests.*;
+import com.zhouq.netty.message.response.*;
 import lombok.Data;
 
 import java.io.Serializable;

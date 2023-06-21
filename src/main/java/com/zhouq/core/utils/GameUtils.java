@@ -1,4 +1,4 @@
-package com.zhouq.myUtils;
+package com.zhouq.core.utils;
 
 import com.zhouq.core.entity.Player;
 

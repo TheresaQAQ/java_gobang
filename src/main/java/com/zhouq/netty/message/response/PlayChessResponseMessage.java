@@ -1,7 +1,7 @@
-package com.zhouq.nio.message.response;
+package com.zhouq.netty.message.response;
 
 import com.zhouq.core.entity.Game;
-import com.zhouq.nio.message.basic.Message;
+import com.zhouq.netty.message.basic.Message;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

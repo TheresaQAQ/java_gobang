@@ -1,8 +1,8 @@
 package com.zhouq.gui;
 
 import com.zhouq.gui.basic.BasicPage;
-import com.zhouq.nio.client.SocketClient;
-import com.zhouq.nio.server.SocketServer;
+import com.zhouq.netty.client.SocketClient;
+import com.zhouq.netty.server.SocketServer;
 
 import javax.swing.*;
 import java.awt.*;

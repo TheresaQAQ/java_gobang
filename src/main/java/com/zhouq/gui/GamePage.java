@@ -2,9 +2,9 @@ package com.zhouq.gui;
 
 import com.zhouq.core.entity.Player;
 import com.zhouq.gui.basic.BasicPage;
-import com.zhouq.nio.message.requests.PlayChessRequestsMessage;
-import com.zhouq.nio.message.requests.RetractChessRequestsMessage;
-import com.zhouq.nio.message.requests.SuePeaceRequestsMessage;
+import com.zhouq.netty.message.requests.PlayChessRequestsMessage;
+import com.zhouq.netty.message.requests.RetractChessRequestsMessage;
+import com.zhouq.netty.message.requests.SuePeaceRequestsMessage;
 import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;

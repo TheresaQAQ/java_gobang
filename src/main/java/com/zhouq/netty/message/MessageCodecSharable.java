@@ -1,8 +1,7 @@
-package com.zhouq.nio.message;
+package com.zhouq.netty.message;
 
 import com.alibaba.fastjson.JSON;
-import com.zhouq.nio.message.basic.Message;
-import com.zhouq.nio.message.requests.SuePeaceRequestsMessage;
+import com.zhouq.netty.message.basic.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message> {
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> outList) throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> outList){
         ByteBuf out = channelHandlerContext.alloc().buffer();
         //4字节魔数
         out.writeByte(0);
@@ -39,13 +38,10 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
         //内容
         out.writeBytes(bytes);
         outList.add(out);
-        if (message instanceof SuePeaceRequestsMessage suePeaceRequestsMessage) {
-            log.debug("编码求和请求");
-        }
     }
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf in, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf in, List<Object> list){
         ByteBuf magic = in.readBytes(1);
         byte version = in.readByte();
         byte serializerType = in.readByte();
@@ -57,9 +53,6 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf,Message>
             //json
             Message object = JSON.parseObject(bytes, Message.getMessageClass(messageType));
             list.add(object);
-            if (object instanceof SuePeaceRequestsMessage suePeaceRequestsMessage) {
-                log.debug("解码求和请求");
-            }
         }
     }
 }

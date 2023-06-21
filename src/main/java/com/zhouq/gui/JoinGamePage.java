@@ -1,12 +1,7 @@
 package com.zhouq.gui;
 
 import com.zhouq.gui.basic.BasicPage;
-import com.zhouq.nio.client.SocketClient;
-import io.netty.channel.Channel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.zhouq.netty.client.SocketClient;
 
 import javax.swing.*;
 import java.awt.*;

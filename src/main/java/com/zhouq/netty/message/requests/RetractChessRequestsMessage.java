@@ -1,6 +1,6 @@
-package com.zhouq.nio.message.requests;
+package com.zhouq.netty.message.requests;
 
-import com.zhouq.nio.message.basic.Message;
+import com.zhouq.netty.message.basic.Message;
 import lombok.Getter;
 import lombok.Setter;
 
