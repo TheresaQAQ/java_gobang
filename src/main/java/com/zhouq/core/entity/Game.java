@@ -22,7 +22,8 @@ public class Game {
     private Player blackPlayer;
     private boolean isBlack;
     private boolean hasWinner;
-    private List<PlayChessHistory> playChessHistory = new ArrayList<>();
+    private List<ChessHistory> chessHistory = new ArrayList<>();
+    private List<Chat> chatHistory = new ArrayList<>();
 
     public Player getPlay(int i) {
         return i == Player.BLACK_CHESS ? this.blackPlayer : whitePlayer;

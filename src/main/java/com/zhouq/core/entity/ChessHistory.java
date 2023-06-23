@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PlayChessHistory {
+public class ChessHistory {
     private int mapX;
     private int mapY;
     private int playType;

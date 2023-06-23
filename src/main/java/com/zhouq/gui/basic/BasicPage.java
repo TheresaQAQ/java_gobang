@@ -1,8 +1,5 @@
 package com.zhouq.gui.basic;
 
-import jdk.jfr.DataAmount;
-import lombok.Data;
-
 import javax.swing.*;
 
 /**

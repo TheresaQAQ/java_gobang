@@ -1,11 +1,8 @@
 package com.zhouq.gui;
 
 import com.zhouq.gui.basic.BasicPage;
-import lombok.Data;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 
 /**
@@ -38,7 +35,7 @@ public class HomePage extends BasicPage {
             this.setVisible(false);
         });
         joinGame.addActionListener(button -> {
-            new JoinGamePage("加入游戏", 150, 110);
+            new JoinGamePage("加入游戏", 150, 130);
             this.setVisible(false);
         });
     }

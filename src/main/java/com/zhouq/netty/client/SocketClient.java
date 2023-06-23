@@ -26,9 +26,6 @@ import javax.swing.*;
  */
 @Slf4j
 public class SocketClient {
-    public static void main(String[] args){
-        runClient("localhost", 8080, null, null);
-    }
 
     public static void runClient(String host, int port, Integer id, JFrame frame) {
         GamePage gamePage = new GamePage(id == null ? "五子棋:黑方" : "五子棋:白方");

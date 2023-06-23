@@ -1,5 +1,6 @@
 package com.zhouq.core.utils;
 
+
 import java.util.Random;
 
 /**
@@ -14,6 +15,7 @@ import java.util.Random;
 public class RandomUtils {
     public static int randomInt(int length){
         Random random = new Random();
-        return random.nextInt(length*10, (length+1)*10-1);
+        return random.nextInt((int) Math.pow(10,length-2), (int) Math.pow(10,length)-2);
     }
+
 }

@@ -2,7 +2,9 @@ package com.zhouq.netty.message.basic;
 
 import com.zhouq.netty.message.requests.*;
 import com.zhouq.netty.message.response.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import java.util.Map;
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class Message implements Serializable {
     public static Class<?> getMessageClass(int messageType) {
         return messageClasses.get(messageType);
@@ -44,6 +48,8 @@ public abstract class Message implements Serializable {
     public static final int END_GAME_RESPONSE = 11;
     public static final int WIN_GAME_RESPONSE = 12;
     public static final int LOSE_GAME_RESPONSE = 13;
+    public static final int CHAT_REQUESTS = 14;
+    public static final int CHAT_RESPONSE = 15;
     private static final Map<Integer, Class<?>> messageClasses = new HashMap<>();
 
     static {
@@ -59,10 +65,7 @@ public abstract class Message implements Serializable {
         messageClasses.put(9, SuePeaceResponseMessage.class);
         messageClasses.put(12, WinGameResponseMessage.class);
         messageClasses.put(13, LoseGameResponseMessage.class);
+        messageClasses.put(14, ChatRequestsMessage.class);
+        messageClasses.put(15, ChatResponseMessage.class);
     }
-    //public int CREATE_GAME_REQUESTS = 12;
-    //public int CREATE_GAME_RESPONSE = 13;
-    //public int CREATE_GAME_REQUESTS = 14;
-    //public int CREATE_GAME_RESPONSE = 15;
-    //public int CREATE_GAME_REQUESTS = 16;
 }

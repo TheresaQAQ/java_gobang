@@ -28,9 +28,6 @@ import java.util.Map;
 @Slf4j
 public class SocketServer {
     public static Map<Integer, Game> games = new HashMap<>();
-    public static void main(String[] args) {
-        runServer(8080);
-    }
 
     public static void runServer(int point) {
         NioEventLoopGroup boss = new NioEventLoopGroup();

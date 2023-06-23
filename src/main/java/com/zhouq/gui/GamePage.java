@@ -1,7 +1,9 @@
 package com.zhouq.gui;
 
+import com.zhouq.core.entity.Chat;
 import com.zhouq.core.entity.Player;
 import com.zhouq.gui.basic.BasicPage;
+import com.zhouq.netty.message.requests.ChatRequestsMessage;
 import com.zhouq.netty.message.requests.PlayChessRequestsMessage;
 import com.zhouq.netty.message.requests.RetractChessRequestsMessage;
 import com.zhouq.netty.message.requests.SuePeaceRequestsMessage;
@@ -18,6 +20,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -43,16 +46,13 @@ public class GamePage extends BasicPage {
     private BufferedImage offsetImg;
     private int[][] maps = new int[15][15];// 0无棋子，1黑子，2白子
     private boolean isBlack = true;// 是否是黑方的回合
-    private String message = "黑方先行";
-    private final String whiteMessage = "无限制";
-    private final String blackMessage = "无限制";// 界面上方信息，下方时间信息
-
-    private int gameTime = 0;// 游戏时间限制（秒）
-    private int blackTime = 0, whiteTime = 0;// 黑白方剩余时间
+    private String message = "白方出棋";
 
     private JButton retractChess;
     private JButton sueSpace;
-    private JTextArea msgArea;
+    private JButton sendMsg;
+    private JTextArea chatArea;
+    private JTextField textInput;
 
     public GamePage(String title, Integer width, Integer height) {
         super(title, width, height);
@@ -60,7 +60,7 @@ public class GamePage extends BasicPage {
     }
 
     public GamePage(String title) {
-        this(title, 600, 600);
+        this(title, 600, 550);
     }
 
     @Override
@@ -68,8 +68,9 @@ public class GamePage extends BasicPage {
         offsetImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         retractChess = new JButton("悔棋");
         sueSpace = new JButton("求和");
-
-        msgArea = new JTextArea();
+        sendMsg = new JButton("发送");
+        textInput = new JTextField();
+        chatArea = new JTextArea();
     }
 
     @Override
@@ -87,17 +88,36 @@ public class GamePage extends BasicPage {
         jPanel.setLayout(null);
         jPanel.setSize(200, 100);
         sueSpace.setLayout(null);
-        sueSpace.setBounds(430, 429, 60, 40);
+        sueSpace.setBounds(425, 429, 60, 40);
         retractChess.setLayout(null);
-        retractChess.setBounds(520, 429, 60, 40);
+        retractChess.setBounds(515, 429, 60, 40);
         this.getContentPane().add(sueSpace);
         this.getContentPane().add(retractChess);
+
+
+        textInput.setLayout(null);
+        textInput.setBounds(425,401,110,25);
+        this.getContentPane().add(textInput);
+
+
+        sendMsg.setFont(new Font("宋体", Font.BOLD, 8));
+        sendMsg.setLayout(null);
+        sendMsg.setBounds(525,400,55,25);
+        this.getContentPane().add(sendMsg);
+
+
+        chatArea.setEditable(false);
+        chatArea.setFont(new Font("宋体", Font.BOLD, 10));
+        chatArea.setLayout(null);
+        chatArea.setBounds(425,90,155,300);
+        this.getContentPane().add(chatArea);
+
 
 
         repaint();
         // 设置背景
         try {
-            bgImage = ImageIO.read(new File("D:\\code\\java\\java_gobang\\src\\main\\java\\com\\others\\img\\background.jpg"));
+            bgImage = ImageIO.read(new File("src/main/resources/source/background.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,22 +143,9 @@ public class GamePage extends BasicPage {
                         playChessMessage.setMapY(mapsY);
                         playChessMessage.setGameId(gameId);
                         playChessMessage.setPlayerType(playerType);
-//                        if (isBlack) {
-//                            playChessMessage.setPlayerType(Player.BLACK_CHESS);
-//                            //maps[mapsY][mapsX] = 1;
-//                            //isBlack = false;
-//                            message = "白色落子";
-//                        } else {
-//                            playChessMessage.setPlayerType(Player.WHITE_CHESS);
-//                            //maps[mapsY][mapsX] = 2;
-//                            //isBlack = true;
-//                            message = "黑色落子";
-//                        }
-                        //checkGame();
                     }
                     channel.writeAndFlush(playChessMessage);
                 }
-                //repaint();
             }
 
             @Override
@@ -185,6 +192,18 @@ public class GamePage extends BasicPage {
             log.debug("from:"+Player.NAMES.get(requestsMessage.getFrom()));
             channel.writeAndFlush(requestsMessage);
         });
+
+        sendMsg.addActionListener(button ->{
+            String text = this.textInput.getText();
+            if (text.isBlank()) {
+                return;
+            }
+            Chat chat = new Chat(LocalDateTime.now(),Player.NAMES.get(this.playerType), text);
+            ChatRequestsMessage requestsMessage = new ChatRequestsMessage(chat);
+            requestsMessage.setGameId(gameId);
+            this.textInput.setText("");
+            channel.writeAndFlush(requestsMessage);
+        });
     }
 
 
@@ -194,19 +213,10 @@ public class GamePage extends BasicPage {
         Graphics g = offsetImg.getGraphics();
         // 绘制背景
         g.drawImage(bgImage, 45, 115, this);
-//        // 绘制上方标题
-//        g.setColor(Color.black);
-//        g.setFont(new Font("楷体", Font.BOLD, 30));
-//        g.drawString("游戏信息：" + message, 100, 75);
-        // 绘制下方
-        g.setColor(Color.gray);
-        g.fillRect(50, 530, 200, 50);
-        g.fillRect(300, 530, 200, 50);
+
         g.setColor(Color.black);
-        g.setFont(new Font("宋体", Font.BOLD, 20));
-        g.drawString("黑方时间：" + blackMessage, 60, 560);
-        g.drawString("白方时间：" + whiteMessage, 310, 560);
-        // 绘制棋盘线条
+        g.setFont(new Font("楷体", Font.BOLD, 30));
+        g.drawString("游戏信息：" + message, 100, 75);
         for (int i = 0; i < 15; i++) {
             g.drawLine(60, 130 + i * chessBoardItemWidth, 410, 130 + i * chessBoardItemWidth);
             g.drawLine(60 + i * chessBoardItemWidth, 130, 60 + i * chessBoardItemWidth, 480);
